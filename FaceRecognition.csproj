@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="Common\Log" />
+        <Folder Include="Model" />
+        <Folder Include="Resources\Image" />
+        <Folder Include="SDK" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+        <PackageReference Include="HandyControls" Version="3.4.4" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-preview.1.23110.8" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3-beta1" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.2" />
+        <PackageReference Include="Panuon.WPF.UI" Version="1.1.8.2" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0-preview.1.23110.8" />
+    </ItemGroup>
+
+</Project>

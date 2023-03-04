@@ -1,0 +1,30 @@
+<UserControl x:Class="FaceRecognition.View.TestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="测试啊啊啊啊啊啊" />
+                <Button Grid.Column="1" Command="{Binding ChangeViewCommand}" Content="切换回" Width="60" Height="40" />
+                <Button Grid.Column="2" Command="{Binding ChangeChildViewCommand}" Content="显示子页面" Width="60"
+                        Height="40" />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ContentPresenter Content="{Binding ChildView,UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+    </Grid>
+</UserControl>
