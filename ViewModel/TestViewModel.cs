@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using FaceRecognition.Common.Router;
@@ -12,7 +13,6 @@ public partial class TestViewModel : ChildViewModelBase
         var data = RouterHelper.GetRouterData();
         if (data != null && data.Count > 0)
             MessageBox.Show(data?["test"].ToString());
-        MessageBox.Show("调用");
     }
 
     [RelayCommand]
@@ -24,7 +24,12 @@ public partial class TestViewModel : ChildViewModelBase
     [RelayCommand]
     private void ChangeChildView()
     {
+        var data = (Dictionary<string, object>)RouterHelper.GetRouterData();
+        if (data != null && data.Count > 0) MessageBox.Show(data?["test"].ToString());
         RouterHelper.PushChildRouter("three");
+        Dictionary<string, object> data2 = new Dictionary<string, object>();
+        data2["test2"] = "测认识";
+        RouterHelper.SendDataToChild(data2,this);
     }
 
     protected override bool BeforeChangeChildView()
@@ -32,5 +37,11 @@ public partial class TestViewModel : ChildViewModelBase
         // var data = (Dictionary<string, object>)RouterHelper.GetRouterData();
         // if (data != null && data.Count > 0) MessageBox.Show(data?["test"].ToString());
         return true;
+    }
+
+    protected override void GetChildSendData(Dictionary<string, object> data)
+    {
+        base.GetChildSendData(data);
+        HandyControl.Controls.MessageBox.Show($"接收到子组件传值{data["test3"]}");
     }
 }

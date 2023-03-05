@@ -18,6 +18,8 @@ public partial class ChildViewModelBase : ObservableRecipient
      * 当前界面
      */
     [ObservableProperty] protected UserControl _childView;
+    
+    protected Dictionary<string, object> _childData = new();
 
     /**
      * 接收到的界面
@@ -65,5 +67,23 @@ public partial class ChildViewModelBase : ObservableRecipient
     protected virtual bool BeforeChangeChildView()
     {
         return true;
+    }
+
+
+    /**
+     * 得到子主件发送的数据
+     */
+    protected virtual void GetChildSendData(Dictionary<string, object> data)
+    {
+        
+    }
+
+    /**
+     * 设置子组件发送的数据
+     */
+    public void SetChildSendData(Dictionary<string, object> data)
+    {
+        _childData = data;
+        GetChildSendData(data);
     }
 }

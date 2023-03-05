@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Messaging;
 using FaceRecognition.Common.Message;
+using FaceRecognition.ViewModel.BaseViewModel;
 using HandyControl.Tools;
 
 namespace FaceRecognition.Common.Router;
@@ -124,5 +125,24 @@ public static class RouterHelper
             var messageModel = new MessageModel(messageList);
             WeakReferenceMessenger.Default.Send<MessageModel, string>(messageModel, "childViewChange");
         });
+    }
+
+    /**
+     * 主动发送数据给子页面
+     */
+    public static void SendDataToChild(Dictionary<string,object> data,ChildViewModelBase childViewModelBase)
+    {
+       var viewModel = (ViewModelBase) childViewModelBase.ChildView.DataContext;
+       viewModel.SetParentSendData(data);
+    }
+    
+    /**
+     * 子页面发送数据给父页面
+     */
+    public static void SendDataToParent(Dictionary<string, object> data, string routerName)
+    {
+        if (!Container.Container.IsExist(routerName)) throw new Exception($"{routerName}路由不存在");
+        var parentView = (ChildViewModelBase) ((UserControl)Container.Container.GetValue(routerName)).DataContext;
+        parentView.SetChildSendData(data);
     }
 }

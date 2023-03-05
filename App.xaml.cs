@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using FaceRecognition.Common.Log;
 using FaceRecognition.Common.Router;
 using FaceRecognition.View;
 using FaceRecognition.ViewModel;
@@ -15,6 +16,7 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
+        LogHelper.LogFilePath = "log.txt";
         Ioc.Default.ConfigureServices(ConfigureServiceProvider());
         RegisterRouter();
         base.OnStartup(e);
@@ -39,6 +41,5 @@ public partial class App : Application
         RouterHelper.AddRouter("login", loginView);
         RouterHelper.AddRouter("test", new TestView());
         RouterHelper.AddRouter("three", new ThreeView());
-        // RouterHelper.AddRouter("login",new LoginView());
     }
 }

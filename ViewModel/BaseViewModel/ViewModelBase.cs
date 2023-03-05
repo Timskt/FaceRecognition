@@ -3,7 +3,26 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace FaceRecognition.ViewModel.BaseViewModel;
 
-public class ViewModelBase : ObservableRecipient
+public partial class ViewModelBase : ObservableRecipient
 {
-    protected Dictionary<string, object> _routerData = new();
+    protected Dictionary<string, object> _parentData = new();
+    
+    
+
+    /**
+     * 得到父主件发送的数据
+     */
+    protected virtual void GetParentSendData(Dictionary<string, object> data)
+    {
+        
+    }
+
+    /**
+     * 设置父组件发送的数据
+     */
+    public void SetParentSendData(Dictionary<string, object> data)
+    {
+        _parentData = data;
+        GetParentSendData(data);
+    }
 }
