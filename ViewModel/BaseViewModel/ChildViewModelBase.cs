@@ -24,7 +24,7 @@ public partial class ChildViewModelBase : ObservableRecipient
      */
     protected UserControl _receiveView;
 
-    protected Dictionary<string, object> _routerData = new Dictionary<string, object>();
+    protected Dictionary<string, object> _routerData = new();
 
 
     public ChildViewModelBase()

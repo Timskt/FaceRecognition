@@ -23,7 +23,7 @@ public static class RouterHelper
      */
     public static void AddRouter(string name, UserControl control)
     {
-     //   Ioc.Default.GetRequiredService<>()
+        //   Ioc.Default.GetRequiredService<>()
         Container.Container.AddData(name, control);
     }
 
@@ -32,8 +32,11 @@ public static class RouterHelper
      */
     public static void IniView(UserControl control)
     {
-        if (Container.Container.GetValue("initView") == null) Container.Container.AddData("initView", control);
-        //       Container.Container.AddData("routerData", new Dictionary<string,object>());
+        if (Container.Container.GetValue("initView") == null)
+        {
+            Container.Container.AddData("initView", control);
+            Container.Container.AddData("routerData", new Dictionary<string, object>());
+        }
     }
 
     /**
@@ -43,7 +46,7 @@ public static class RouterHelper
     {
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
-        if (null == contentControl) throw new Exception($"{name}一级路由不存在");  
+        if (null == contentControl) throw new Exception($"{name}一级路由不存在");
         Container.Container.AddData("routerData", data);
         ViewContentChange(contentControl, data);
     }
@@ -55,15 +58,15 @@ public static class RouterHelper
     {
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
-        if (null == contentControl) throw new Exception($"{name}一级路由不存在");  
+        if (null == contentControl) throw new Exception($"{name}一级路由不存在");
         // contentControl.GetType().GetMethod("SetDataContext").Invoke()
         Container.Container.AddData("routerData", data);
-        Type control =   contentControl.GetType();
-        var instance= Activator.CreateInstance(control);
+        var control = contentControl.GetType();
+        var instance = Activator.CreateInstance(control);
         Container.Container.AddData(name, instance);
         ViewContentChange((UserControl)instance, data);
     }
-    
+
     /**
      * 跳转非一级路由
      */
@@ -75,7 +78,7 @@ public static class RouterHelper
         Container.Container.AddData("routerData", data);
         ChildViewContentChange(contentControl, data);
     }
-    
+
     /**
      * 跳转非一级路由,生成新页面
      */
@@ -85,8 +88,8 @@ public static class RouterHelper
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}路由不存在");
         Container.Container.AddData("routerData", data);
-        Type control =   contentControl.GetType();
-        var instance= Activator.CreateInstance(control);
+        var control = contentControl.GetType();
+        var instance = Activator.CreateInstance(control);
         Container.Container.AddData(name, instance);
         ChildViewContentChange((UserControl)instance, data);
     }

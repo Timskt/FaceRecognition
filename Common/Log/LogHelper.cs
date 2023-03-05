@@ -12,7 +12,7 @@ public static class LogHelper
 
     public static void WriteLog(string message)
     {
-        using (StreamWriter streamWriter = new StreamWriter(LogFilePath))
+        using (var streamWriter = new StreamWriter(LogFilePath))
         {
             streamWriter.WriteLine($"{DateTime.Now}: {message}");
         }

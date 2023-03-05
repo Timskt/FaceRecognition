@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using FaceRecognition.Common.Router;
@@ -8,15 +7,14 @@ namespace FaceRecognition.ViewModel;
 
 public partial class TestViewModel : ChildViewModelBase
 {
-
-    public TestViewModel():base()
+    public TestViewModel()
     {
-        var data = (Dictionary<string, object>)RouterHelper.GetRouterData();
-        if (data != null && data.Count > 0) 
+        var data = RouterHelper.GetRouterData();
+        if (data != null && data.Count > 0)
             MessageBox.Show(data?["test"].ToString());
-         MessageBox.Show("调用");
+        MessageBox.Show("调用");
     }
-    
+
     [RelayCommand]
     private void ChangeView()
     {

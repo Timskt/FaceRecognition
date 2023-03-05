@@ -3,7 +3,6 @@ using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using FaceRecognition.Common.Container;
 using FaceRecognition.Common.Message;
 using FaceRecognition.Common.Router;
 using HandyControl.Tools;
@@ -24,8 +23,8 @@ public partial class MainViewModelBase : ObservableRecipient
      * 接收到的界面
      */
     protected UserControl _receiveView;
-    
-    protected Dictionary<string, object> _routerData = new Dictionary<string, object>();
+
+    protected Dictionary<string, object> _routerData = new();
 
 
     public MainViewModelBase()
@@ -50,7 +49,7 @@ public partial class MainViewModelBase : ObservableRecipient
     {
         var messagelist = message.Value;
         var view = (UserControl)messagelist.NowMessageList["nowView"];
-        _receiveView = view; 
+        _receiveView = view;
         _routerData = (Dictionary<string, object>)messagelist.NowMessageList["data"];
         if (BeforeChangeView())
             Application.Current.RunOnUIThread(() => { NowView = view; });
