@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Common\Log" />
         <Folder Include="Model" />
         <Folder Include="Resources\Image" />
         <Folder Include="SDK" />
