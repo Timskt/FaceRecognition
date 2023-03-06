@@ -71,19 +71,19 @@ public static class RouterHelper
     /**
      * 跳转非一级路由
      */
-    public static void PushChildRouter(string name, Dictionary<string, object> data = null)
+    public static void PushChildRouter(ChildViewModelBase parentViewModel,string name, Dictionary<string, object> data = null)
     {
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}路由不存在");
         Container.Container.AddData("routerData", data);
-        ChildViewContentChange(contentControl, data);
+        ChildViewContentChange(contentControl, data,parentViewModel.GetClassName());
     }
 
     /**
      * 跳转非一级路由,生成新页面
      */
-    public static void PushChildRouterNoHistory(string name, Dictionary<string, object> data = null)
+    public static void PushChildRouterNoHistory(ChildViewModelBase parentViewModel,string name, Dictionary<string, object> data = null)
     {
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
@@ -92,7 +92,7 @@ public static class RouterHelper
         var control = contentControl.GetType();
         var instance = Activator.CreateInstance(control);
         Container.Container.AddData(name, instance);
-        ChildViewContentChange((UserControl)instance, data);
+        ChildViewContentChange((UserControl)instance, data,parentViewModel.GetClassName());
     }
 
     /**
@@ -115,7 +115,7 @@ public static class RouterHelper
         });
     }
 
-    private static void ChildViewContentChange(UserControl control, Dictionary<string, object> data)
+    private static void ChildViewContentChange(UserControl control, Dictionary<string, object> data,string parentViewModelClassName)
     {
         DispatcherHelper.RunOnMainThread(() =>
         {
@@ -123,7 +123,7 @@ public static class RouterHelper
             messageList.NowMessageList["childView"] = control;
             messageList.NowMessageList["data"] = data;
             var messageModel = new MessageModel(messageList);
-            WeakReferenceMessenger.Default.Send<MessageModel, string>(messageModel, "childViewChange");
+            WeakReferenceMessenger.Default.Send<MessageModel, string>(messageModel, "childViewChange"+parentViewModelClassName);
         });
     }
 
@@ -132,8 +132,17 @@ public static class RouterHelper
      */
     public static void SendDataToChild(Dictionary<string,object> data,ChildViewModelBase childViewModelBase)
     {
-       var viewModel = (ViewModelBase) childViewModelBase.ChildView.DataContext;
-       viewModel.SetParentSendData(data);
+        try
+        {
+            var viewModel = (ViewModelBase) childViewModelBase.ChildView.DataContext;
+            viewModel.SetParentSendData(data);
+        }
+        catch (Exception e)
+        {
+            var viewModel = (ChildViewModelBase) childViewModelBase.ChildView.DataContext;
+            viewModel.SetParentSendData(data);
+        }
+
     }
     
     /**

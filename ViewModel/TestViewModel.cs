@@ -26,7 +26,7 @@ public partial class TestViewModel : ChildViewModelBase
     {
         var data = (Dictionary<string, object>)RouterHelper.GetRouterData();
         if (data != null && data.Count > 0) MessageBox.Show(data?["test"].ToString());
-        RouterHelper.PushChildRouter("three");
+        RouterHelper.PushChildRouter(this,"three");
         Dictionary<string, object> data2 = new Dictionary<string, object>();
         data2["test2"] = "测认识";
         RouterHelper.SendDataToChild(data2,this);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -27,6 +28,8 @@ public partial class ChildViewModelBase : ObservableRecipient
     protected UserControl _receiveView;
 
     protected Dictionary<string, object> _routerData = new();
+    
+    protected Dictionary<string, object> _parentData = new();
 
 
     public ChildViewModelBase()
@@ -38,7 +41,7 @@ public partial class ChildViewModelBase : ObservableRecipient
     //注册路由
     protected void RegisterRouter()
     {
-        WeakReferenceMessenger.Default.Register<ChildViewModelBase, MessageModel, string>(this, "childViewChange",
+        WeakReferenceMessenger.Default.Register<ChildViewModelBase, MessageModel, string>(this, "childViewChange"+GetClassName(),
             (recipient, message) => { DispatcherHelper.RunOnMainThread(() => { ReceiveRouter(message); }); });
     }
 
@@ -85,5 +88,27 @@ public partial class ChildViewModelBase : ObservableRecipient
     {
         _childData = data;
         GetChildSendData(data);
+    }
+
+    public string GetClassName()
+    {
+        return this.GetType().FullName.Split(".").LastOrDefault();
+    }
+    
+    /**
+     * 得到父主件发送的数据
+     */
+    protected virtual void GetParentSendData(Dictionary<string, object> data)
+    {
+        
+    }
+
+    /**
+     * 设置父组件发送的数据
+     */
+    public void SetParentSendData(Dictionary<string, object> data)
+    {
+        _parentData = data;
+        GetParentSendData(data);
     }
 }
