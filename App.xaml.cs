@@ -40,6 +40,7 @@ public partial class App : Application
         RouterHelper.IniView(loginView);
         RouterHelper.AddRouter("login", loginView);
         RouterHelper.AddRouter("test", new TestView());
-        RouterHelper.AddRouter("three", new ThreeView());
+  //      RouterHelper.AddRouter("three", new ThreeView());
+        RouterHelper.AddRouterByClassType("three",typeof(ThreeView),true);
     }
 }

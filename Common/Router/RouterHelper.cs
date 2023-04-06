@@ -10,6 +10,8 @@ namespace FaceRecognition.Common.Router;
 
 public static class RouterHelper
 {
+    
+
     /**
      * 得到初始化界面
      */
@@ -28,6 +30,25 @@ public static class RouterHelper
         Container.Container.AddData(name, control);
     }
 
+    public static void AddRouterByClassType(string name, Type type,bool isInit=false)
+    {
+        if (Container.Container.IsExist(name)) throw new Exception("不要重复注册同一个路由");
+
+        if (isInit)
+        {
+            var control = type.GetType();
+            var instance = Activator.CreateInstance(control);
+            Container.Container.AddData(name, (UserControl)instance);
+        }
+        else
+        {
+            //未激活状态
+            Container.Container.AddData(name+"RouterByClass", type);
+            Container.Container.AddData(name+"RouterByClassFlag", false);
+        }
+    }
+
+    
     /**
      * 设置开始界面
      */
@@ -45,6 +66,7 @@ public static class RouterHelper
      */
     public static void Push(string name, Dictionary<string, object> data = null)
     {
+        Check(name);
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}一级路由不存在");
@@ -57,6 +79,7 @@ public static class RouterHelper
      */
     public static void PushNoHistory(string name, Dictionary<string, object> data = null)
     {
+        Check(name);
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}一级路由不存在");
@@ -73,6 +96,7 @@ public static class RouterHelper
      */
     public static void PushChildRouter(ChildViewModelBase parentViewModel,string name, Dictionary<string, object> data = null)
     {
+        Check(name);
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}路由不存在");
@@ -85,6 +109,7 @@ public static class RouterHelper
      */
     public static void PushChildRouterNoHistory(ChildViewModelBase parentViewModel,string name, Dictionary<string, object> data = null)
     {
+        Check(name);
         UserControl contentControl = null;
         contentControl = (UserControl)Container.Container.GetValue(name);
         if (null == contentControl) throw new Exception($"{name}路由不存在");
@@ -153,5 +178,62 @@ public static class RouterHelper
         if (!Container.Container.IsExist(routerName)) throw new Exception($"{routerName}路由不存在");
         var parentView = (ChildViewModelBase) ((UserControl)Container.Container.GetValue(routerName)).DataContext;
         parentView.SetChildSendData(data);
+    }
+
+    private static void Check(string name)
+    {
+        if (!Container.Container.IsExist(name))
+        {
+            if (null == Container.Container.GetValue(name+"RouterByClass")) throw new Exception($"{name}路由不存在");
+            if ((bool)Container.Container.GetValue(name+"RouterByClassFlag")==false)
+            {
+                Type type =(Type) Container.Container.GetValue(name + "RouterByClass");
+                var control = type.GetType();
+                var instance = Activator.CreateInstance(control);
+                Container.Container.AddData(name, (UserControl)instance);
+                Container.Container.Update(name + "RouterByClassFlag",true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 注销消息
+    /// </summary>
+    /// <param name="name"></param>
+    public static void UnRegisterMessage(string name)
+    {
+        Check(name);
+        if (!Container.Container.IsExist(name)) throw new Exception($"{name}路由不存在");
+        try
+        {
+           ViewModelBase viewModelBase =(ViewModelBase)Container.Container.GetValue(name);
+           viewModelBase.UnRegister();
+        }
+        catch (Exception e)
+        {
+
+        }
+        try
+        {
+            ChildViewModelBase childViewModelBase =(ChildViewModelBase)Container.Container.GetValue(name);
+            childViewModelBase.UnRegister();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    /// <summary>
+    /// 根据路由名称得到页面
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static UserControl GetViewByName(string name)
+    {
+        Check(name);
+        if (!Container.Container.IsExist(name)) throw new Exception($"{name}路由不存在");
+        return (UserControl) Container.Container.GetValue(name);
     }
 }

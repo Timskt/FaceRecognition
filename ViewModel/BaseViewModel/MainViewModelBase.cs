@@ -62,4 +62,5 @@ public partial class MainViewModelBase : ObservableRecipient
     {
         return true;
     }
+    
 }

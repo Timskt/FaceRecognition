@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace FaceRecognition.ViewModel.BaseViewModel;
 
@@ -24,5 +25,10 @@ public partial class ViewModelBase : ObservableRecipient
     {
         _parentData = data;
         GetParentSendData(data);
+    }
+    
+    public void UnRegister()
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
 }

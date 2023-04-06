@@ -111,4 +111,9 @@ public partial class ChildViewModelBase : ObservableRecipient
         _parentData = data;
         GetParentSendData(data);
     }
+    
+    public void UnRegister()
+    {
+        WeakReferenceMessenger.Default.UnregisterAll(this);
+    }
 }
